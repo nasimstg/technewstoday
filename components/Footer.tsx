@@ -26,6 +26,11 @@ export default function Footer() {
           <div>{` • `}</div>
           <Link href="/">{siteMetadata.title}</Link>
         </div>
+        <div className="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
+          <Link href="/terms-and-conditions">Terms & Conditions</Link>
+          <div>{` • `}</div>
+          <Link href="/privacy-policy">Privacy & Policy</Link>
+        </div>
         <div className="mb-8 text-sm text-gray-500 dark:text-gray-400">
           <Link href="https://nasimstg.vercel.app" target="_blank" rel="noopener noreferrer">
             by @nasimstg

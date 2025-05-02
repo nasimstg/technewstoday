@@ -25,6 +25,7 @@ import rehypePresetMinify from 'rehype-preset-minify'
 import siteMetadata from './data/siteMetadata'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
 import prettier from 'prettier'
+import { title } from 'process'
 
 const root = process.cwd()
 const isProduction = process.env.NODE_ENV === 'production'
@@ -93,6 +94,35 @@ function createSearchIndex(allBlogs) {
   }
 }
 
+export const Info = defineDocumentType(() => ({
+  name: 'Info',
+  filePathPattern: 'info/*.mdx',
+  contentType: 'mdx',
+  fields: {
+    title: { type: 'string', required: true },
+    date: { type: 'date', required: true },
+    draft: { type: 'boolean' },
+    layout: { type: 'string' },
+    bibliography: { type: 'string' },
+    canonicalUrl: { type: 'string' },
+  },
+  computedFields: {
+    ...computedFields,
+    structuredData: {
+      type: 'json',
+      resolve: (doc) => ({
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        headline: doc.title,
+        datePublished: doc.date,
+        dateModified: doc.date,
+        image: siteMetadata.socialBanner,
+        url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
+      }),
+    },
+  },
+}))
+
 export const Blog = defineDocumentType(() => ({
   name: 'Blog',
   filePathPattern: 'blog/**/*.mdx',
@@ -149,7 +179,7 @@ export const Authors = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Blog, Authors],
+  documentTypes: [Blog, Authors, Info],
   mdx: {
     cwd: process.cwd(),
     remarkPlugins: [
