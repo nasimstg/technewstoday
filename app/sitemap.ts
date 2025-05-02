@@ -14,10 +14,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: post.lastmod || post.date,
     }))
 
-  const routes = ['', 'blog', 'projects', 'tags'].map((route) => ({
+  const routes = ['', 'blog', 'tags'].map((route) => ({
     url: `${siteUrl}/${route}`,
     lastModified: new Date().toISOString().split('T')[0],
   }))
+
+  // Add static routes
+  routes.push(
+    { url: `${siteUrl}/about`, lastModified: new Date().toISOString().split('T')[0] },
+    { url: `${siteUrl}/privacy-policy`, lastModified: new Date().toISOString().split('T')[0] },
+    { url: `${siteUrl}/terms-and-conditions`, lastModified: new Date().toISOString().split('T')[0] }
+  )
 
   return [...routes, ...blogRoutes]
 }
